@@ -23,7 +23,7 @@ class Environment:
         cells = [ (r, c) for r in range(self.N) for c in range(self.M) ]
         rnd.shuffle(cells)
 
-        # set cradles
+        # set cradles (TODO: Cradles cannot be pushed with current env values)
         x, y = rnd_choice(cells)
         for cradle in self.cradles: 
             self.env[x][y].set_entity(cradle)
