@@ -55,9 +55,21 @@ class Environment:
             else:
                 return False
 
+        squares = []
+
         for child in self.children:
             x = child.x
             y = child.y
+
+            # count new dirty zones using children
+            adjs = self.square(x, y)
+            pchild = list(filter(lambda z: isinstance(self.env[z[0]][z[1]].entity, Child), adjs))
+            empties = list(filter(lambda z: self.env[z[0]][z[1]].is_empty, adjs))
+            count = len(pchild)
+            new_trash = rnd.randint(0, (count * (count == 1) + 3 * (count == 2) + 6*(count >= 3)))
+            
+            squares.append((empties, new_trash))
+
             nx, ny = rnd.choice(self.map_adj((x, y), not_stay=False))
 
             if x == nx and y == ny:
@@ -69,7 +81,24 @@ class Environment:
             else:
                 pass
 
-        # perform dirty accions
+        # put trash in env
+        print(squares)
+        for pos, cnt in squares:
+            for tx, ty in rnd_choice_many(pos, cnt):
+                if self.env[tx][ty].is_empty: 
+                    self.env[tx][ty].dirty = True
+                    self.dirty += 1
+
+    def square(self, x, y):
+        adjs = []
+        for d in SQUARE:
+            nx = x + d[0]
+            ny = y + d[1]
+
+            if self.is_inside(nx, ny):
+                adjs.append((nx, ny))
+
+        return adjs
 
     def map_adj(self, pos, pred=None, not_stay=True):
         adjs = []
