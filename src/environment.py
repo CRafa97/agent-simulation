@@ -48,7 +48,6 @@ class Environment:
                 return False
             
             if self.env[bx][by].is_empty or (isinstance(self.env[bx][by].entity, Block) and can_move_block(bx, by, dir)):
-                print("Moving")
                 blk = self.env[x][y].entity
                 self.env[x][y].free_entity()
                 self.env[bx][by].set_entity(blk)
