@@ -11,6 +11,7 @@ class Environment:
         self.M = M
         self.t = t
         self.env = []
+        self.agent = None
         self.cradles = [ Cradle() for _ in range(childn) ]
         self.children = [ Child() for _ in range(childn) ]
         self.blocking = [ Block() for _  in range(int( (bp*N*M)/100 )) ]
@@ -23,11 +24,17 @@ class Environment:
         cells = [ (r, c) for r in range(self.N) for c in range(self.M) ]
         rnd.shuffle(cells)
 
-        # set cradles (TODO: Cradles cannot be pushed with current env values)
+        # set cradles
         x, y = rnd_choice(cells)
         for cradle in self.cradles: 
             self.env[x][y].set_entity(cradle)
-            x, y = rnd_choice(cells, pred= lambda z: z in self.map_adj((x, y)))
+            try:
+                x, y = rnd_choice(cells, pred= lambda z: z in self.map_adj((x, y)))
+            except:
+                self.remake() # try again set cradles
+                return
+
+        # set agent in same position
 
         # set children and blocking
         for entity in self.children + self.blocking:
@@ -88,6 +95,11 @@ class Environment:
                 if self.env[tx][ty].is_empty: 
                     self.env[tx][ty].dirty = True
                     self.dirty += 1
+
+    def insert_agent(self, x, y, agent):
+        assert not (self.is_inside(x, y) and self.env[x][y].is_empty), "Invalid args for agent insertion"
+        self.env[x][y].set_agent(agent)
+        self.agent = self.env[x][y].agent
 
     def square(self, x, y):
         adjs = []

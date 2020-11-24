@@ -1,5 +1,3 @@
-import uuid
-
 class Child:
     def __init__(self):
         pass

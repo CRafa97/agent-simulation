@@ -12,7 +12,8 @@ def main():
         if (i + 1) % env.t == 0:
             print("SHUFFLE ENV")
             env.remake()
-        
+
+
         print(env)
         print("-----------------------------------------")
 
