@@ -6,12 +6,12 @@ from utils import *
 import random as rnd
 
 class Environment:
-    def __init__(self, N, M, t, dp, bp, childn):
+    def __init__(self, N, M, t, dp, bp, childn, agent):
         self.N = N
         self.M = M
         self.t = t
         self.env = []
-        self.agent = None
+        self.agent = agent
         self.cradles = [ Cradle() for _ in range(childn) ]
         self.children = [ Child() for _ in range(childn) ]
         self.blocking = [ Block() for _  in range(int( (bp*N*M)/100 )) ]
@@ -35,6 +35,8 @@ class Environment:
                 return
 
         # set agent in same position
+        x, y = rnd_choice(cells)
+        self.env[x][y].set_agent(self.agent)
 
         # set children and blocking
         for entity in self.children + self.blocking:
@@ -89,7 +91,6 @@ class Environment:
                 pass
 
         # put trash in env
-        print(squares)
         for pos, cnt in squares:
             for tx, ty in rnd_choice_many(pos, cnt):
                 if self.env[tx][ty].is_empty: 
@@ -100,6 +101,13 @@ class Environment:
         assert not (self.is_inside(x, y) and self.env[x][y].is_empty), "Invalid args for agent insertion"
         self.env[x][y].set_agent(agent)
         self.agent = self.env[x][y].agent
+
+    def move_agent(self, x, y):
+        self.env[self.agent.x][self.agent.y].free_agent()
+        self.insert_agent(x, y, self.agent)
+
+    def remove_child(self, child):
+        self.children.remove(child)
 
     def square(self, x, y):
         adjs = []

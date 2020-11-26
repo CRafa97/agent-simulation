@@ -2,14 +2,14 @@ import random as rnd
 
 DIRS = [
     (0, 0), # represents stay position (first for ingore cases)
-    #(-1,-1),
+    (-1,-1),
     (-1, 0),
-    #(-1, 1),
+    (-1, 1),
     (0, -1),
     (0, 1),
-    #(1, -1),
+    (1, -1),
     (1, 0),
-    #(1, 1),
+    (1, 1),
 ]
 
 SQUARE = [
