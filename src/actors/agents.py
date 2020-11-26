@@ -29,9 +29,11 @@ class Reactive:
         self.info = near_actors(pos, env)
 
     def action(self):
-        # first try get a child
+        # in-place actions
+        
         step = 1 + bool(self.carry)
 
+        # first try get a child
         if not self.carry and self.info["c"]:
             # compute step to child
             pass
