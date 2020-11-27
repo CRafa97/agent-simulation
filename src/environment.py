@@ -1,7 +1,6 @@
-""" Defines the problem environment - discreto, accesible, determinista, dinamico, episodico """
-
 from cell import Cell
-from actors import *
+from entities import *
+from agents import *
 from utils import *
 import random as rnd
 
@@ -98,7 +97,6 @@ class Environment:
                     self.dirty += 1
 
     def insert_agent(self, x, y, agent):
-        assert not (self.is_inside(x, y) and self.env[x][y].is_empty), "Invalid args for agent insertion"
         self.env[x][y].set_agent(agent)
         self.agent = self.env[x][y].agent
 
