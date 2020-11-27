@@ -18,6 +18,12 @@ class Environment:
 
         self.remake()
 
+    def is_clean(self):
+        return self.dirty == 0 and all(c.with_child for c in self.cradles)
+
+    def trash_pc(self):
+        return (self.dirty / ((self.N * self.M) - len(self.cradles) - len(self.children) - len(self.blocking) - 1)) 
+
     def remake(self):
         self.env = [ [ Cell(i, j) for j in range(self.M) ] for i in range(self.N) ] # clean env
         cells = [ (r, c) for r in range(self.N) for c in range(self.M) ]
@@ -130,7 +136,7 @@ class Environment:
         return adjs
 
     def is_inside(self, x, y):
-        return 0 <= x < self.N and 0 <= y < self.M
+        return 0 <= x < self.N and 0 <= y < self.M 
 
     def __str__(self):
         return '\n'.join(' '.join(str(self.env[i][j]) for j in range(self.M)) for i in range(self.N))

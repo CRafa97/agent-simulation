@@ -22,9 +22,11 @@ class Reactive(Agent):
 
     def see(self, env):
         pos = (self.x, self.y)
-        self.looked = near_actor(pos, env, bool(self.carry))
-        print(self.looked)
-
+        if not self.carry and len(env.children):
+            self.looked = near_actor(pos, env, ["c"])
+        else:
+            self.looked = near_actor(pos, env, ["C", "X"])
+        
     def action(self, env):
         if env.env[self.x][self.y].is_dirty:
             env.env[self.x][self.y].dirty = False
@@ -32,55 +34,66 @@ class Reactive(Agent):
         elif isinstance(env.env[self.x][self.y].entity, Cradle) and self.carry:
             env.env[self.x][self.y].entity.child = self.carry
             self.carry = None
-        
-        step = 1 + bool(self.carry)
+        else:
+            if self.looked is None:
+                return
 
-        while step:
-            if str(self.looked) == "c":
-                nx, ny = self.compute_next_move((self.looked.x, self.looked.y), env)
-                env.move_agent(nx, ny)
-                if str(env.env[self.x][self.y].entity) == "c":
-                    self.carry = env.env[self.x][self.y].entity
-                    env.remove_child(self.carry)
-            else:
-                nx, ny = self.compute_next_move((self.looked.x, self.looked.y), env, obs=["B", "c"])
-                env.move_agent(nx, ny)
-            step -= 1
+            step = 1 + bool(self.carry)
+
+            while step:
+                if str(self.looked) == "c":
+                    nx, ny = self.compute_next_move((self.looked.x, self.looked.y), env)
+                    env.move_agent(nx, ny)
+                    if str(env.env[self.x][self.y].entity) == "c":
+                        self.carry = env.env[self.x][self.y].entity
+                        env.env[self.x][self.y].entity = None
+                        env.remove_child(self.carry)
+                else:
+                    nx, ny = self.compute_next_move((self.looked.x, self.looked.y), env, obs=["B", "C", "c"])
+                    env.move_agent(nx, ny)
+                step -= 1
 
     def next(self, env):
         self.see(env)
         self.action(env)
 
-    def compute_next_move(self, pos, env, obs=["B"]):
+    def compute_next_move(self, pos, env, obs=["B", "C"]):
         x, y = pos
         dx = np.sign(x - self.x)
         dy = np.sign(y - self.y)
         
-        if str(env.env[x + dx][y + dy]) in obs:
-           return rnd_choice(env.map_adj((x, y)), pred=lambda z: env.env[z[0]][z[1]].entity == None)
+        if str(env.env[self.x + dx][self.y + dy]) in obs:
+            if str(env.env[self.x + dx][self.y + dy]) == "C" and not env.env[self.x + dx][self.y + dy].entity.with_child:
+                pass
+            else:
+                try: # cannot choice a pos, bot blocked
+                    return rnd_choice(env.map_adj((self.x, self.y)), pred=lambda z: env.env[z[0]][z[1]].entity == None)
+                except:
+                    # cannot choice a pos, bot blocked
+                    return self.x, self.y
 
         return self.x + dx, self.y + dy
 
     def __str__(self):
-        return "R"
+        return "R" if not self.carry else "r"
 
 class Proactive:
     pass
 
-def near_actor(pos, env, child=False):    
+def near_actor(pos, env, search):    
     queue = [pos]
     mark = [ [ False for _ in range(len(env.env[0]))] for _ in range(len(env.env)) ]
     entity = None
     while queue:
         x, y = queue.pop(0)
         mark[x][y] = True
-        # selector
-        if (not child and str(env.env[x][y].entity) == "c") or \
-            (str(env.env[x][y].entity) == "C" and not env.env[x][y].entity.with_child) or \
-                env.env[x][y].is_dirty:
-
-            entity = env.env[x][y]
-            break
+        
+        if str(env.env[x][y]) in search:
+            if str(env.env[x][y]) == "C" and env.env[x][y].entity.with_child:
+                pass     
+            else:
+                entity = env.env[x][y]
+                break
 
         for ax, ay in env.map_adj((x, y)):
             if not mark[ax][ay]:

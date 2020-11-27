@@ -31,10 +31,10 @@ class Cell:
         return self.entity == None and self.agent == None and not self.dirty
 
     def __str__(self):
-        if self.entity:
-            return str(self.entity)
-        elif self.agent:
+        if self.agent:
             return str(self.agent)
+        elif self.entity:
+            return str(self.entity)
         elif self.dirty:
             return "X"
         else:
