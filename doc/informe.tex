@@ -185,7 +185,23 @@ Es importante aclarar que el robot y los ni\~nos se mueven en las 8 direcciones,
 
 Se generar\'on 10 ambientes para cada uno se hizo 30 corridas usando cada modelo de agente (los 2 principales expuestos). Al analizar los resultados podemos concluir que el segundo modelo fue mejor para resover el problema, incluso las veces que no puedo completar la tarea y fue despedido no dejo una cantidad grande de basura en el ambiente. Si observamos los ambientes generados podemos ver como existen algunos que por sus caracter\'isticas ser\'an muy f\'aciles para el robot o no habr\'a forma que consiga evitar ser despedido. Principalmente el ambiente 3 y 10, los cuales parecen ser bastantes complejos, podemos ver como intentar colocar todos los ni\~nos en sus corrales da mejores resultados, adem\'as el ambiente 1, presenta un 40\% de basura, es el que m\'as basura tiene, en este el primer modelo falla todas las veces dejando en promedio 30\% de basura, mientras el segundo modelo solo falla una vez.
 
+La informaci\'on de los ambientes es la siguiente:
 
+\begin{figure}[h]
+	\includegraphics[scale=0.67]{./imgs/envs}
+\end{figure}
+
+Los valores resultantes para el modelo 1 el cual consideramos como un agente reactivo:
+
+\begin{figure}[h]
+	\includegraphics[scale=0.65]{./imgs/reactive}
+\end{figure}
+
+Y los valores para el segundo modelo el cual se considera proactivo
+
+\begin{figure}[h]
+	\includegraphics[scale=0.65]{./imgs/proactive}
+\end{figure}
 
 \section*{Repositorio}
 
