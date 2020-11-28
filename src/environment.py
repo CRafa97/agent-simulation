@@ -43,7 +43,7 @@ class Environment:
                 self.remake() # try again set cradles
                 return
 
-        # set agent in same position
+        # set agent or predefine a position 
         if self.agent:
             x, y = rnd_choice(cells)
             self.env[x][y].set_agent(self.agent)
@@ -61,7 +61,6 @@ class Environment:
             self.env[x][y].dirty = True
 
     def next(self):
-        """ Change the env to next state """
        
         def can_move_block(x, y, dir):
             bx, by = x + dir[0], y + dir[1]

@@ -15,7 +15,6 @@ def run():
         results = {i: None for i in range(10)}
         for i, env in enumerate(envs):
             c_agent = deepcopy(agent)
-            env = deepcopy(env)
             env.set_rnd_agent(c_agent)
             copy = deepcopy(env)
             d = {"Despedido": 0, "Casa Limpia": 0, "Trash": [] }

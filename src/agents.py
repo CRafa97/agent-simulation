@@ -48,10 +48,9 @@ class Agent:
             if str(env.env[self.x + dx][self.y + dy]) == "C" and not env.env[self.x + dx][self.y + dy].entity.with_child:
                 pass
             else:
-                try: # cannot choice a pos, bot blocked
+                try:
                     return rnd_choice(env.map_adj((self.x, self.y)), pred=lambda z: env.env[z[0]][z[1]].entity == None)
                 except:
-                    # cannot choice a pos, bot blocked
                     return self.x, self.y
 
         return self.x + dx, self.y + dy
