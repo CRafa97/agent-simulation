@@ -5,7 +5,7 @@ from utils import *
 import random as rnd
 
 class Environment:
-    def __init__(self, N, M, t, dp, bp, childn, agent):
+    def __init__(self, N, M, t, dp, bp, childn, agent=None):
         self.N = N
         self.M = M
         self.t = t
@@ -22,7 +22,11 @@ class Environment:
         return self.dirty == 0 and all(c.with_child for c in self.cradles)
 
     def trash_pc(self):
-        return (self.dirty / ((self.N * self.M) - len(self.cradles) - len(self.children) - len(self.blocking) - 1)) 
+        return round((self.dirty / ((self.N * self.M) - len(self.cradles) - len(self.children) - len(self.blocking) - 1)), 2) 
+
+    def set_rnd_agent(self, agent):
+        x, y = self.agent
+        self.insert_agent(x, y, agent)
 
     def remake(self):
         self.env = [ [ Cell(i, j) for j in range(self.M) ] for i in range(self.N) ] # clean env
@@ -40,8 +44,11 @@ class Environment:
                 return
 
         # set agent in same position
-        x, y = rnd_choice(cells)
-        self.env[x][y].set_agent(self.agent)
+        if self.agent:
+            x, y = rnd_choice(cells)
+            self.env[x][y].set_agent(self.agent)
+        else:
+            self.agent = rnd_choice(cells)
 
         # set children and blocking
         for entity in self.children + self.blocking:
