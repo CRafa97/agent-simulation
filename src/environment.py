@@ -121,7 +121,7 @@ class Environment:
 
     def square(self, x, y):
         adjs = []
-        for d in SQUARE:
+        for d in DIRS:
             nx = x + d[0]
             ny = y + d[1]
 

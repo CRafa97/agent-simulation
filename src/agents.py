@@ -105,6 +105,8 @@ def near_entity(pos, env, search):
     entity = None
     while queue:
         x, y = queue.pop(0)
+        if mark[x][y]:
+            continue
         mark[x][y] = True
         if str(env.env[x][y]) in search:
             if str(env.env[x][y]) == "C" and env.env[x][y].entity.with_child:
@@ -112,7 +114,7 @@ def near_entity(pos, env, search):
             else:
                 entity = env.env[x][y]
                 break
-        for ax, ay in env.map_adj((x, y)):
+        for ax, ay in env.square(x, y):
             if not mark[ax][ay]:
                 queue.append((ax, ay))
     return entity
