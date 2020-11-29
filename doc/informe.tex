@@ -188,7 +188,7 @@ Se generar\'on 10 ambientes para cada uno se hizo 30 corridas usando cada modelo
 La informaci\'on de los ambientes es la siguiente:
 
 \begin{figure}[h]
-	\includegraphics[scale=0.67]{./imgs/envs}
+	\includegraphics[scale=0.64]{./imgs/envs}
 \end{figure}
 
 Los valores resultantes para el modelo 1 el cual consideramos como un agente reactivo:
@@ -203,12 +203,16 @@ Y los valores para el segundo modelo el cual se considera proactivo
 	\includegraphics[scale=0.65]{./imgs/proactive}
 \end{figure}
 
+Para contrastar con estos resultados tambien se implementaron otros dos modelos como se vio anteriormente. Estos resultados pueden verse si se corre la simulacion definida en el archivo \verb|simulator.py|. El agente que busca como objetivo evitar el despido resulta muy malo para resolver el problema ya que siempre termina despedido debido a que es preferible iontentar ubicar a los ni\~nos primeramente sin tener en cuenta si esta acci\'on implica un aumento en la basura del ambiente. Este modelo se penso para corresponderse a la representaci\'on de $goal direct$ expresada en [2], pero los cambios cada $t$ turnos resultan perjudiciales para cualquier intento de crear una estrategia a largo plazo. El otra agente realiza la tarea m\'as pr\'oxima que tiene, ya sea buscar a un ni\~no, dejarlo en una cuna si es que lo carga y la tiene cerca o limpiar la basura cercana.
+
 \section*{Repositorio}
 
 \url{https://github.com/CRafa97/agent-simulation}
 
 \begin{thebibliography}{9}
+	[1] Temas de Simulaci\'on, Dr. Luciano Garc\'ia Garrido\\
 	
+	[2] Artificial Intelligence a 2020, Stuart Russell, Peter Norving
 \end{thebibliography}
 
 \label{end}
